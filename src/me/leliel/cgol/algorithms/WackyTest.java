@@ -5,7 +5,7 @@ import me.leliel.cgol.Controller;
 public class WackyTest implements Algorithm {
 
 	/*
-	 * Just used for testing and as an additional example for how to setup a new algorithm, not to be taken as an actual
+	 * Just used for testing and as an additional example for how to setup a new algorithm, not to be taken as an actual cellular automata rule
 	 */
 	
 	@Override
