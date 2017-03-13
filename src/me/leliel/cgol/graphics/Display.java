@@ -24,6 +24,7 @@ public class Display extends Canvas implements MouseListener, MouseMotionListene
 		setBounds(0, 0, window.WIDTH, window.HEIGHT);
 		this.addKeyListener(this);
 		this.addMouseListener(this);
+		this.addMouseMotionListener(this);
 	}
 	
 	public void render(Graphics g){
@@ -144,7 +145,15 @@ public class Display extends Canvas implements MouseListener, MouseMotionListene
 	public void mouseReleased(MouseEvent arg0) {}
 
 	@Override
-	public void mouseDragged(MouseEvent arg0) {}
+	public void mouseDragged(MouseEvent arg0) {
+		Point p = arg0.getPoint();
+		p.translate((int) (this.cameraLocation.getX() - Controller.g.getRenderPos().getX())*scale, (int)(-this.cameraLocation.getY() - Controller.g.getRenderPos().getY())*scale);
+		
+		p.setLocation(p.x/scale, p.y/scale);
+		
+		Controller.g.setCell(Controller.g.cellState(p) == Controller.alg.maxState() ? 0 : Controller.g.cellState(p) + 1, p);
+		if(Controller.paused) Controller.g.updateGrid(); // It is only necessary to update the grid if paused, if not it updates anyway.
+	}
 
 	@Override
 	public void mouseMoved(MouseEvent arg0) {}

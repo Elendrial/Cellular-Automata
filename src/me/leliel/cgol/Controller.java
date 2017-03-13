@@ -59,17 +59,17 @@ public class Controller implements Runnable{
         double unprocessed2 = 0;
         
         while(isRunning){
-           // Variable ticks (algorithm)
+            // Variable ticks (algorithm)
         	now1 = System.nanoTime();
             unprocessed1 += (now1 - then1) / nsPerTick1;
             then1 = now1;
-            while(unprocessed1 >= 1){
+            while(unprocessed1 >= 1 && System.currentTimeMillis() - fpsTimer < 1000){
                 tick();
                 tick++;
                 unprocessed1--;
-            } tick(); tick++;
+            }
             
-           // Fixed ticks (camera moving)
+            // Fixed ticks (camera moving)
             now2 = System.nanoTime();
             unprocessed2 += (now2 - then2) / nsPerTick2;
             then2 = now2;
