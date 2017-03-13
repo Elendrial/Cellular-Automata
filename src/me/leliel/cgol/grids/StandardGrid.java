@@ -1,14 +1,13 @@
 package me.leliel.cgol.grids;
 
 import java.awt.Point;
-import java.util.Random;
 
 import me.leliel.cgol.Controller;
 
 public class StandardGrid implements Grid{
 
-	public boolean[][] grid;
-	public boolean[][] upcomingGrid;
+	public int[][] grid;
+	public int[][] upcomingGrid;
 	
 	public Point dimensions;
 	public Point renderPoint;
@@ -21,11 +20,11 @@ public class StandardGrid implements Grid{
 	
 	@SuppressWarnings("unused")
 	public void setup(int x, int y){
-		grid = new boolean[x][y];
+		grid = new int[x][y];
 		
-		for(boolean[] b : grid)	for(boolean b2 : b)	b2 = false;
+		for(int[] b : grid)	for(int b2 : b)	b2 = 0;
 		
-		upcomingGrid = new boolean[x][y];
+		upcomingGrid = new int[x][y];
 		
 		dimensions = new Point(x,y);
 		
@@ -36,32 +35,32 @@ public class StandardGrid implements Grid{
 		return dimensions;
 	}
 	
-	public boolean specialOperation(){
+	public boolean isBusy(){
 		return specialOperation;
 	}
 	
 	// ALGO
 	
 	@Override
-	public boolean cellState(int x, int y) {
+	public int cellState(int x, int y) {
 		try{return grid[x][y];}
-		catch(Exception e){return false;}
+		catch(Exception e){return 0;}
 	}
 	
 	@Override
-	public boolean cellState(Point p) {
+	public int cellState(Point p) {
 		try{return grid[p.x][p.y];}
-		catch(Exception e){return false;}
+		catch(Exception e){return 0;}
 	}
 	
 	
-	public void setCell(boolean alive, int x, int y){
-		try{upcomingGrid[x][y] = alive;}
+	public void setCell(int state, int x, int y){
+		try{upcomingGrid[x][y] = state;}
 		catch(Exception e){e.printStackTrace();}
 	}
 	
-	public void setCell(boolean alive, Point p){
-		try{upcomingGrid[p.x][p.y] = alive;}
+	public void setCell(int state, Point p){
+		try{upcomingGrid[p.x][p.y] = state;}
 		catch(Exception e){e.printStackTrace();}
 	}
 	
@@ -70,7 +69,7 @@ public class StandardGrid implements Grid{
 	public void updateGrid(){
 		for(int i = 0; i < grid.length; i++){
 			grid[i] = upcomingGrid[i].clone();
-			for(boolean b : upcomingGrid[i]) b = false;
+			for(int b : upcomingGrid[i]) b = 0;
 		}
 	}
 	
@@ -78,21 +77,35 @@ public class StandardGrid implements Grid{
 		this.specialOperation = true;
 		for(int i = 0; i < Controller.g.getDimensions().getX(); i++){
 			for(int j = 0; j < Controller.g.getDimensions().getY(); j++){
-				this.setCell(false, i,j);
+				this.setCell(0, i,j);
 			}
 		}
 		this.updateGrid();
 		this.specialOperation = false;
 	}
 	
-	public void randomise(float chance){
+	public void randomise(float... chance){
 		this.specialOperation = true;
-		Random rand = new Random();
+		float total = 0;
+		float[] chances = chance;
+		
+		for(int i = 0; i < chances.length; i++) total += chances[i];
+		
 		for(int i = 0; i < Controller.g.getDimensions().getX(); i++){
 			for(int j = 0; j < Controller.g.getDimensions().getY(); j++){
-				if(rand.nextFloat() < chance) this.setCell(true, i,j);
+				final float f = Controller.rand.nextFloat();
+				float temp = f * total;
+				boolean found = false;
+				for(int k = 0; k < chances.length && !found; k++){
+					temp -= chances[k];
+					if(temp <= 0){
+						this.setCell(k, i,j);
+						found = true;
+					}
+				}
 			}
 		}
+		
 		this.updateGrid();
 		this.specialOperation = false;
 	}

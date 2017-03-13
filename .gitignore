@@ -64,3 +64,4 @@ $RECYCLE.BIN/
 *.prefs
 .classpath
 .project
+src/me/leliel/cgol/ConwaysLife.java

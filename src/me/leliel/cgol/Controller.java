@@ -1,5 +1,7 @@
 package me.leliel.cgol;
 
+import java.util.Random;
+
 import me.leliel.cgol.algorithms.Algorithm;
 import me.leliel.cgol.graphics.Window;
 import me.leliel.cgol.grids.Grid;
@@ -9,6 +11,8 @@ public class Controller implements Runnable{
 	public static Grid g;
 	public static Window win;
 	public static Controller tickControl = new Controller();
+	
+	public static Random rand = new Random();
 	
 	public static boolean paused = false;
 	public static boolean isRunning = false;

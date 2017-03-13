@@ -33,10 +33,25 @@ public class Display extends Canvas implements MouseListener, MouseMotionListene
 		g.setColor(Color.black);
 		g.fillRect((int)(-cameraLocation.getX() + Controller.g.getRenderPos().getX()) * scale, (int)(cameraLocation.getY() + Controller.g.getRenderPos().getY()) * scale, (int)Controller.g.getDimensions().getX() * scale, (int)Controller.g.getDimensions().getY() * scale);
 		
-		g.setColor(Color.white);
 		for(int i = 0; i < Controller.g.getDimensions().getX(); i++){
 			for(int j = 0; j < Controller.g.getDimensions().getY(); j++){
-				if(Controller.g.cellState(i,j))g.fillRect((int)(i-cameraLocation.getX() + Controller.g.getRenderPos().getX()) * scale, (int)(j+cameraLocation.getY() + Controller.g.getRenderPos().getY()) * scale, scale, scale);
+				if(Controller.g.cellState(i, j) != 0){
+					if(Controller.g.cellState(i,j) == 1) g.setColor(Color.white);
+					else if(Controller.g.cellState(i,j) == 2)g.setColor(Color.pink);
+					else if(Controller.g.cellState(i,j) == 3)g.setColor(Color.blue);
+					else if(Controller.g.cellState(i,j) == 4)g.setColor(Color.red);
+					else if(Controller.g.cellState(i,j) == 5)g.setColor(Color.GREEN);
+					else if(Controller.g.cellState(i,j) == 6)g.setColor(Color.gray);
+					else if(Controller.g.cellState(i,j) == 7)g.setColor(Color.orange);
+					else if(Controller.g.cellState(i,j) == 8)g.setColor(Color.darkGray);
+					else if(Controller.g.cellState(i,j) == 9)g.setColor(Color.yellow);
+					else if(Controller.g.cellState(i,j) == 10)g.setColor(Color.LIGHT_GRAY);
+					else if(Controller.g.cellState(i,j) == 11)g.setColor(Color.cyan);
+					else if(Controller.g.cellState(i,j) == 12)g.setColor(Color.magenta);
+					else if(Controller.g.cellState(i,j) == 13)g.setColor(Color.pink);
+					
+					g.fillRect((int)(i-cameraLocation.getX() + Controller.g.getRenderPos().getX()) * scale, (int)(j+cameraLocation.getY() + Controller.g.getRenderPos().getY()) * scale, scale, scale);
+				}
 			}
 		}
 		
@@ -70,10 +85,13 @@ public class Display extends Canvas implements MouseListener, MouseMotionListene
 			if(scale > 1) scale--;
 			break;
 		case KeyEvent.VK_R:
-			Controller.g.randomise(0.05f);
+			Controller.g.randomise(0.95f, 0.05f);
 			break;
 		case KeyEvent.VK_C:
 			Controller.g.clear();
+			break;
+		case KeyEvent.VK_T:
+			if(Controller.paused) Controller.alg.tick();
 			break;
 		}
 	}
@@ -109,8 +127,8 @@ public class Display extends Canvas implements MouseListener, MouseMotionListene
 		
 		p.setLocation(p.x/scale, p.y/scale);
 		
-		Controller.g.setCell(!Controller.g.cellState(p), p);
-		if(Controller.paused) Controller.g.updateGrid();
+		Controller.g.setCell(Controller.g.cellState(p) == Controller.alg.maxState() ? 0 : Controller.g.cellState(p) + 1, p);
+		if(Controller.paused) Controller.g.updateGrid(); // It is only necessary to update the grid if paused, if not it updates anyway.
 	}
 
 	@Override
