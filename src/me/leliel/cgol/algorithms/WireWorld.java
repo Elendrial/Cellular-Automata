@@ -32,4 +32,9 @@ public class WireWorld implements Algorithm {
 		return 3;
 	}
 
+	@Override
+	public String algorithmName() {
+		return "Wire World";
+	}
+
 }

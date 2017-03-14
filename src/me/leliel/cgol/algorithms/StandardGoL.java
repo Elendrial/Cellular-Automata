@@ -28,6 +28,11 @@ public class StandardGoL implements Algorithm{
 	public int maxState() {
 		return 1;
 	}
+
+	@Override
+	public String algorithmName() {
+		return "Game Of Life";
+	}
 	
 	
 	

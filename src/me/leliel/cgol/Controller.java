@@ -1,8 +1,10 @@
 package me.leliel.cgol;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import me.leliel.cgol.algorithms.Algorithm;
+import me.leliel.cgol.graphics.InputHandler;
 import me.leliel.cgol.graphics.Window;
 import me.leliel.cgol.grids.Grid;
 
@@ -11,7 +13,9 @@ public class Controller implements Runnable{
 	public static Grid g;
 	public static Window win;
 	public static Controller tickControl = new Controller();
+	public static InputHandler inputHandler = new InputHandler();
 	
+	public static ArrayList<Algorithm> algorithms = new ArrayList<Algorithm>();
 	public static Random rand = new Random();
 	
 	public static boolean paused = false;
@@ -32,28 +36,45 @@ public class Controller implements Runnable{
 	}
 	
 	public static void tickFixed(){
-		win.display.cameraLocation.translate(win.display.cameraMoving.x, win.display.cameraMoving.y);
+		InputHandler.cameraLocation.translate(InputHandler.cameraMoving.x, InputHandler.cameraMoving.y);
 	}
 
+	public static void changeAlgorithm(String newAlg){
+		String s = newAlg.trim().toLowerCase().replace(" ", "");
+		for(int i = 0; i < algorithms.size(); i++){
+			if(algorithms.get(i).algorithmName().trim().toLowerCase().replace(" ", "").equals(s)){
+				alg = algorithms.get(i);
+			}
+		}
+	}
 	
 	
 	// How often we want the game to tick per second
     public int VARIABLE_TARGET_TPS = 30;
     public int FIXED_TARGET_TPS = 30;
+
+    private double nsPerTick1, nsPerTick2;
+    
+    public void updateTPS(){
+    	double secondsPerTick = 1D / VARIABLE_TARGET_TPS;
+        nsPerTick1 = secondsPerTick * 1000000000D;
+        
+        secondsPerTick = 1D / FIXED_TARGET_TPS;
+        nsPerTick2 = secondsPerTick * 1000000000D;
+    }
     
 	@Override
 	public void run() {
         int tick = 0;
         
+        updateTPS();
+        
         double fpsTimer = System.currentTimeMillis();
-        double secondsPerTick = 1D / VARIABLE_TARGET_TPS;
-        double nsPerTick1 = secondsPerTick * 1000000000D;
         double then1 = System.nanoTime();
         double now1;
         double unprocessed1 = 0;
 
-        secondsPerTick = 1D / FIXED_TARGET_TPS;
-        double nsPerTick2 = secondsPerTick * 1000000000D;
+        
         double then2 = System.nanoTime();
         double now2;
         double unprocessed2 = 0;

@@ -43,4 +43,9 @@ public class WackyTest implements Algorithm {
 		return 4;
 	}
 
+	@Override
+	public String algorithmName() {
+		return "TestAlgorithm";
+	}
+
 }
