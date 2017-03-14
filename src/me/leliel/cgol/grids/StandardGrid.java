@@ -12,7 +12,7 @@ public class StandardGrid implements Grid{
 	public Point dimensions;
 	public Point renderPoint;
 	
-	public boolean specialOperation = false;
+	private boolean busy = false;
 	
 	public void setup(){
 		this.setup(100, 100);
@@ -36,7 +36,7 @@ public class StandardGrid implements Grid{
 	}
 	
 	public boolean isBusy(){
-		return specialOperation;
+		return busy;
 	}
 	
 	// ALGO
@@ -74,45 +74,24 @@ public class StandardGrid implements Grid{
 	}
 	
 	public void clear(){
-		this.specialOperation = true;
+		this.busy = true;
 		for(int i = 0; i < Controller.g.getDimensions().getX(); i++){
 			for(int j = 0; j < Controller.g.getDimensions().getY(); j++){
 				this.setCell(0, i,j);
 			}
 		}
 		this.updateGrid();
-		this.specialOperation = false;
-	}
-	
-	public void randomise(float... chance){
-		this.specialOperation = true;
-		float total = 0;
-		float[] chances = chance;
-		
-		for(int i = 0; i < chances.length; i++) total += chances[i];
-		
-		for(int i = 0; i < Controller.g.getDimensions().getX(); i++){
-			for(int j = 0; j < Controller.g.getDimensions().getY(); j++){
-				final float f = Controller.rand.nextFloat();
-				float temp = f * total;
-				boolean found = false;
-				for(int k = 0; k < chances.length && !found; k++){
-					temp -= chances[k];
-					if(temp <= 0){
-						this.setCell(k, i,j);
-						found = true;
-					}
-				}
-			}
-		}
-		
-		this.updateGrid();
-		this.specialOperation = false;
+		this.busy = false;
 	}
 	
 	// RENDER
 	
 	public Point getRenderPos(){
 		return renderPoint;
+	}
+
+	@Override
+	public void setBusy(boolean b) {
+		this.busy = b;
 	}
 }

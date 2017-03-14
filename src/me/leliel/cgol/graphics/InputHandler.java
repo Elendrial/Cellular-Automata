@@ -40,7 +40,7 @@ public class InputHandler implements MouseListener, MouseMotionListener, KeyList
 			if(scale > 1) scale--;
 			break;
 		case KeyEvent.VK_R:
-			Controller.g.randomise(0.95f, 0.05f);
+			Controller.g.randomise();
 			break;
 		case KeyEvent.VK_C:
 			Controller.g.clear();

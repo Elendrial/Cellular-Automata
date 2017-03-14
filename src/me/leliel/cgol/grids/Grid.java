@@ -2,12 +2,15 @@ package me.leliel.cgol.grids;
 
 import java.awt.Point;
 
+import me.leliel.cgol.Controller;
+
 public interface Grid {
 	
 	abstract public void setup();
 	abstract public void setup(int x, int y);
 	abstract public Point getDimensions();
 	abstract public boolean isBusy();
+	abstract public void setBusy(boolean b);
 	
 	// Algorithm stuff
 	abstract public int cellState(int x, int y);
@@ -20,7 +23,9 @@ public interface Grid {
 	
 	abstract public void clear();
 	
-	abstract public void randomise(float... chance);
+	public default void randomise(){
+		Controller.alg.randomizeGrid(this);
+	}
 	
 	// Render stuff
 	abstract public Point getRenderPos();

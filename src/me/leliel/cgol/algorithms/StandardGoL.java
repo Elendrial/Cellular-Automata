@@ -1,6 +1,7 @@
 package me.leliel.cgol.algorithms;
 
 import me.leliel.cgol.Controller;
+import me.leliel.cgol.grids.Grid;
 
 public class StandardGoL implements Algorithm{
 
@@ -32,6 +33,35 @@ public class StandardGoL implements Algorithm{
 	@Override
 	public String algorithmName() {
 		return "Game Of Life";
+	}
+
+
+	public float[] chances = {0.95f, 0.5f};
+	
+	@Override
+	public void randomizeGrid(Grid g) {
+		g.setBusy(true);
+		float total = 0;
+		
+		for(int i = 0; i < chances.length; i++) total += chances[i];
+		
+		for(int i = 0; i < Controller.g.getDimensions().getX(); i++){
+			for(int j = 0; j < Controller.g.getDimensions().getY(); j++){
+				final float f = Controller.rand.nextFloat();
+				float temp = f * total;
+				boolean found = false;
+				for(int k = 0; k < chances.length && !found; k++){
+					temp -= chances[k];
+					if(temp <= 0){
+						g.setCell(k, i,j);
+						found = true;
+					}
+				}
+			}
+		}
+		
+		g.updateGrid();
+		g.setBusy(false);
 	}
 	
 	

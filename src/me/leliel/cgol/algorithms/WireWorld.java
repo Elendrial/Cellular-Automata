@@ -1,6 +1,7 @@
 package me.leliel.cgol.algorithms;
 
 import me.leliel.cgol.Controller;
+import me.leliel.cgol.grids.Grid;
 
 public class WireWorld implements Algorithm {
 
@@ -35,6 +36,11 @@ public class WireWorld implements Algorithm {
 	@Override
 	public String algorithmName() {
 		return "Wire World";
+	}
+
+	@Override
+	public void randomizeGrid(Grid g) {
+		//TODO
 	}
 
 }
