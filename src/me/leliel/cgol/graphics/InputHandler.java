@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import me.leliel.cgol.Controller;
 
@@ -73,16 +74,56 @@ public class InputHandler implements MouseListener, MouseMotionListener, KeyList
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {}
-
-	@Override
 	public void mouseClicked(MouseEvent arg0) {
+		if(SwingUtilities.isLeftMouseButton(arg0)) leftClick(arg0);
+		else if(SwingUtilities.isRightMouseButton(arg0)) rightClick(arg0);
+		else if(SwingUtilities.isMiddleMouseButton(arg0)) middleClick(arg0);
+	}
+	
+	@Override
+	public void mouseDragged(MouseEvent arg0) {
+		if(SwingUtilities.isLeftMouseButton(arg0)) leftClick(arg0);
+		else if(SwingUtilities.isRightMouseButton(arg0)) rightClick(arg0);
+		else if(SwingUtilities.isMiddleMouseButton(arg0)) middleClick(arg0);
+	}
+
+	
+	public static int leftClickAction = -1; // -1 : increment cell state, anything else : set cell state to x
+	public static int rightClickAction = 0;
+	public static int middleClickAction = 1;
+	
+	public void leftClick(MouseEvent arg0){
 		Point p = arg0.getPoint();
 		p.translate((int) (cameraLocation.getX() - Controller.g.getRenderPos().getX())*scale, (int)(-cameraLocation.getY() - Controller.g.getRenderPos().getY())*scale);
 		
 		p.setLocation(p.x/scale, p.y/scale);
 		
-		Controller.g.setCell(Controller.g.cellState(p) == Controller.alg.maxState() ? 0 : Controller.g.cellState(p) + 1, p);
+		if(leftClickAction <= -1) Controller.g.setCell(Controller.g.cellState(p) == Controller.alg.maxState() ? 0 : Controller.g.cellState(p) + 1, p);
+		else Controller.g.setCell(leftClickAction, p);
+		if(Controller.paused) Controller.g.updateGrid(); // It is only necessary to update the grid if paused, if not it updates anyway.
+	}
+	
+
+	public void middleClick(MouseEvent arg0){
+		Point p = arg0.getPoint();
+		p.translate((int) (cameraLocation.getX() - Controller.g.getRenderPos().getX())*scale, (int)(-cameraLocation.getY() - Controller.g.getRenderPos().getY())*scale);
+		
+		p.setLocation(p.x/scale, p.y/scale);
+		
+		if(middleClickAction <= -1) Controller.g.setCell(Controller.g.cellState(p) == Controller.alg.maxState() ? 0 : Controller.g.cellState(p) + 1, p);
+		else Controller.g.setCell(middleClickAction, p);
+		if(Controller.paused) Controller.g.updateGrid(); // It is only necessary to update the grid if paused, if not it updates anyway.
+	}
+	
+	
+	public void rightClick(MouseEvent arg0){
+		Point p = arg0.getPoint();
+		p.translate((int) (cameraLocation.getX() - Controller.g.getRenderPos().getX())*scale, (int)(-cameraLocation.getY() - Controller.g.getRenderPos().getY())*scale);
+		
+		p.setLocation(p.x/scale, p.y/scale);
+		
+		if(rightClickAction <= -1) Controller.g.setCell(Controller.g.cellState(p) == Controller.alg.maxState() ? 0 : Controller.g.cellState(p) + 1, p);
+		else Controller.g.setCell(rightClickAction, p);
 		if(Controller.paused) Controller.g.updateGrid(); // It is only necessary to update the grid if paused, if not it updates anyway.
 	}
 
@@ -98,18 +139,4 @@ public class InputHandler implements MouseListener, MouseMotionListener, KeyList
 	@Override
 	public void mouseReleased(MouseEvent arg0) {}
 
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
-		Point p = arg0.getPoint();
-		p.translate((int) (cameraLocation.getX() - Controller.g.getRenderPos().getX())*scale, (int)(-cameraLocation.getY() - Controller.g.getRenderPos().getY())*scale);
-		
-		p.setLocation(p.x/scale, p.y/scale);
-		
-		Controller.g.setCell(Controller.g.cellState(p) == Controller.alg.maxState() ? 0 : Controller.g.cellState(p) + 1, p);
-		if(Controller.paused) Controller.g.updateGrid(); // It is only necessary to update the grid if paused, if not it updates anyway.
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0) {}
-	
 }
