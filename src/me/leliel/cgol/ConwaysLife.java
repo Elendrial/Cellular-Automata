@@ -1,7 +1,7 @@
 package me.leliel.cgol;
 
 import me.leliel.cgol.algorithms.StandardGoL;
-import me.leliel.cgol.algorithms.WackyTest;
+import me.leliel.cgol.algorithms.AlgTest;
 import me.leliel.cgol.algorithms.WireWorld;
 import me.leliel.cgol.graphics.Window;
 import me.leliel.cgol.grids.StandardGrid;
@@ -17,7 +17,7 @@ public class ConwaysLife {
 	public static void init(){
 		Controller.algorithms.add(new StandardGoL());
 		Controller.algorithms.add(new WireWorld());
-		Controller.algorithms.add(new WackyTest());
+		Controller.algorithms.add(new AlgTest());
 		
 		Controller.alg = new WireWorld();
 		Controller.g = new StandardGrid();

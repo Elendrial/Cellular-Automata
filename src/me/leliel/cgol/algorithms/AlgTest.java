@@ -1,8 +1,9 @@
 package me.leliel.cgol.algorithms;
 
 import me.leliel.cgol.Controller;
+import me.leliel.cgol.grids.Grid;
 
-public class WackyTest implements Algorithm {
+public class AlgTest implements Algorithm {
 
 	/*
 	 * Just used for testing and as an additional example for how to setup a new algorithm, not to be taken as an actual cellular automata rule
@@ -46,6 +47,12 @@ public class WackyTest implements Algorithm {
 	@Override
 	public String algorithmName() {
 		return "TestAlgorithm";
+	}
+
+	@Override
+	public void randomizeGrid(Grid g) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
