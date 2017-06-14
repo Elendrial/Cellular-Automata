@@ -19,7 +19,7 @@ public class ConwaysLife {
 		Controller.algorithms.add(new WireWorld());
 		Controller.algorithms.add(new AlgTest());
 		
-		Controller.alg = new WireWorld();
+		Controller.alg = new StandardGoL();
 		Controller.g = new StandardGrid();
 		
 		Controller.win = new Window("Conways game of Life", 1100, 650);

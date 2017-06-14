@@ -1,5 +1,6 @@
 package me.leliel.cgol.graphics;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -48,6 +49,9 @@ public class InputHandler implements MouseListener, MouseMotionListener, KeyList
 			break;
 		case KeyEvent.VK_T:
 			if(Controller.paused) Controller.alg.tick();
+			break;
+		case KeyEvent.VK_ESCAPE:
+			doOptionsMenu();
 			break;
 		}
 	}
@@ -126,6 +130,66 @@ public class InputHandler implements MouseListener, MouseMotionListener, KeyList
 		else Controller.g.setCell(rightClickAction, p);
 		if(Controller.paused) Controller.g.updateGrid(); // It is only necessary to update the grid if paused, if not it updates anyway.
 	}
+	
+	
+	// Probably an awful way to do it, but hey, it's quick and simple!
+	public void doOptionsMenu(){
+		Object[] options = {"Algorithm", "Tick rate", "Mouse Options", "Display Options", "Cancel"};
+		
+		int initial = JOptionPane.showOptionDialog(null, "What would you like to change?", "Options", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+		
+		// Algorithm
+		if(initial == 0){
+			Controller.changeAlgorithm(JOptionPane.showInputDialog(null, "What would you like to do?", "TSP Node Options"));
+		}
+		
+		// DELAY
+		if(initial == 1){
+			Controller.tickControl.VARIABLE_TARGET_TPS = Integer.parseInt(JOptionPane.showInputDialog(null, "Current TPS: " + Controller.tickControl.VARIABLE_TARGET_TPS + "\nSet new Tick Rate"));
+			Controller.tickControl.updateTPS();
+		}
+		
+		// Mouse Options
+		if(initial == 2){
+			Object[] mouseOptions = {"Left Click Action", "Middle Click Action", "Right Click Action", "Cancel"};
+			
+			int mouseOption =  JOptionPane.showOptionDialog(null, "What would you like to change?", "Mouse Options", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, mouseOptions, mouseOptions[0]);
+			
+			switch(mouseOption){
+			case 0:
+				leftClickAction = Integer.parseInt(JOptionPane.showInputDialog(null, "What state should left click set cells to? (-1 for incrementing)"));
+				break;
+			case 1:
+				middleClickAction = Integer.parseInt(JOptionPane.showInputDialog(null, "What state should middle click set cells to? (-1 for incrementing)"));
+				break;
+			case 2:
+				rightClickAction = Integer.parseInt(JOptionPane.showInputDialog(null, "What state should right click set cells to? (-1 for incrementing)"));
+				break;
+			}
+		}
+		
+		// Display Options
+		if(initial == 3){
+			Object[] displayOptions = {"State colours", "Zoom in key", "Zoom out key", "Screen Info", "Cancel"};
+			
+			int displayOption =  JOptionPane.showOptionDialog(null, "What would you like to change?", "Display Options", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, displayOptions, displayOptions[0]);
+			
+			switch(displayOption){
+			case 0:
+				int state = Integer.parseInt(JOptionPane.showInputDialog(null, "What state do you want to change the colour of?"));
+				Color c = Color.getColor(JOptionPane.showInputDialog(null, "What is the new colour?"));
+				System.out.println(c.toString());
+				Controller.win.display.colourList[state % 12] = c;
+			}
+		}
+	}
+	
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {}
+	
+	@Override
+	public void mouseMoved(MouseEvent arg0) {}
 
 	@Override
 	public void mouseEntered(MouseEvent arg0) {}
